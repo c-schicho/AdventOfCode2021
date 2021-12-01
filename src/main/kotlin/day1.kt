@@ -3,7 +3,8 @@ import java.io.File
 fun task1() {
     print(
         File("day1/input1.txt")
-            .readLines().map { it.toInt() }
+            .readLines()
+            .map { it.toInt() }
             .windowed(2, 1)
             .count { it.first() < it.last() }
     )
