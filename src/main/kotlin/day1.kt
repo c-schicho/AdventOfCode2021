@@ -1,8 +1,8 @@
 import java.io.File
 
 fun task1() {
-    print(
-        File("day1/input1.txt")
+    println(
+        File("data/day1/input1.txt")
             .readLines()
             .map { it.toInt() }
             .windowed(2, 1)
@@ -11,8 +11,8 @@ fun task1() {
 }
 
 fun task2() {
-    print(
-        File("day1/input1.txt")
+    println(
+        File("data/day1/input1.txt")
             .readLines()
             .map { it.toInt() }
             .windowed(4, 1)
