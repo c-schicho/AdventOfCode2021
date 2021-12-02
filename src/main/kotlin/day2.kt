@@ -1,6 +1,14 @@
 import java.io.File
 
 private fun task1(): Int {
+    val calculateEndPosition = { idx: Int, acc: Int, x: Int ->
+        if (idx > 1) {
+            acc * x
+        } else {
+            x - acc
+        }
+    }
+
     return File("data/day2/input1.txt")
         .readLines()
         .map { it.split(" ") }
@@ -8,13 +16,7 @@ private fun task1(): Int {
         .map { it.key to it.value.sum() }
         .sortedBy { it.first.length }
         .map { it.second }
-        .reduceIndexed { idx, acc, x ->
-            if (idx > 1) {
-                acc * x
-            } else {
-                x - acc
-            }
-        }
+        .reduceIndexed(calculateEndPosition)
 }
 
 private fun task2(): Int {
@@ -22,20 +24,21 @@ private fun task2(): Int {
     var hPos = 0
     var depth = 0
 
+    val navigateSubmarine = { action: String, x: Int ->
+        when (action) {
+            "up" -> aim -= x
+            "down" -> aim += x
+            "forward" -> {
+                hPos += x
+                depth += aim * x
+            }
+        }
+    }
+
     File("data/day2/input1.txt")
         .readLines()
         .map { it.split(" ") }
-        .forEach {
-            val x = it.last().toInt()
-            when (it.first()) {
-                "up" -> aim -= x
-                "down" -> aim += x
-                "forward" -> {
-                    hPos += x
-                    depth += aim * x
-                }
-            }
-        }
+        .forEach { navigateSubmarine(it.first(), it.last().toInt())}
 
     return hPos * depth
 }
