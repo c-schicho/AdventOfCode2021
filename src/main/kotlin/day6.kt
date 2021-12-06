@@ -1,20 +1,20 @@
 import java.io.File
 
 private class LanternFish(
-    var daysUntilBirth: Int
+    var daysUntilNewFishBirth: Int
 ) {
     var firstLifeCycle = true
 
     fun simulateOneDayAfter() {
-        if (daysUntilBirth == 0) {
-            daysUntilBirth = 6
+        if (daysUntilNewFishBirth == 0) {
+            daysUntilNewFishBirth = 6
             firstLifeCycle = false
         } else {
-            daysUntilBirth--
+            daysUntilNewFishBirth--
         }
     }
 
-    fun hasJustBornNewFish() = daysUntilBirth == 6 && !firstLifeCycle
+    fun hasJustBornNewFish() = daysUntilNewFishBirth == 6 && !firstLifeCycle
 
     companion object {
         fun readFromFile(path: String): List<LanternFish> =
@@ -27,7 +27,7 @@ private fun task1(): Int {
 
     for (day in 1..80) {
         fishPopulation.forEach(LanternFish::simulateOneDayAfter)
-        val nNewFish = fishPopulation.count { it.hasJustBornNewFish() }
+        val nNewFish = fishPopulation.count(LanternFish::hasJustBornNewFish)
         for (newFish in 1..nNewFish) {
             fishPopulation.add(LanternFish(8))
         }
@@ -36,17 +36,16 @@ private fun task1(): Int {
 }
 
 private fun task2(): Long {
-    val fishList = File("data/day6/input1.txt").readText().split(",").map { it.toInt() }
-    val fishPopulation = MutableList<MutableList<Long>>(9) { mutableListOf() }
-    fishPopulation.forEachIndexed { idx, list -> list.add(fishList.count { it == idx }.toLong()) }
+    val fishList = File("data/day6/input1.txt").readText().split(",").map(String::toInt)
+    val fishPopulation = MutableList(9) { idx -> fishList.count { it == idx }.toLong() }
 
     for (day in 1..256) {
-        val nNewFish = fishPopulation.first().first()
+        val nNewFish = fishPopulation.first()
         fishPopulation.removeAt(0)
-        fishPopulation.add(8, mutableListOf(nNewFish))
-        fishPopulation[6][0] += nNewFish
+        fishPopulation.add(8, nNewFish)
+        fishPopulation[6] += nNewFish
     }
-    return fishPopulation.sumOf { it.first() }
+    return fishPopulation.sum()
 }
 
 fun main() {
