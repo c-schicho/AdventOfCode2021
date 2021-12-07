@@ -8,7 +8,7 @@ private fun readCrabPositionsFromFileSorted(path: String = "data/day7/input1.txt
 private fun calculateFuelConsumptionForPosition(
     positions: List<Int>,
     positionToCalculate: Int,
-    doublingCosts: Boolean = true
+    doublingCosts: Boolean
 ): Int {
     var fuelConsumption = positions.map { abs(it - positionToCalculate) }
     if (doublingCosts) {
@@ -17,24 +17,24 @@ private fun calculateFuelConsumptionForPosition(
     return fuelConsumption.sum()
 }
 
-private fun findCheapestGatheringPosition(positions: List<Int>, doublingCosts: Boolean = false): Int {
-    var cheapestFuelConsumption = Int.MAX_VALUE
+private fun findMinFuelConsumption(positions: List<Int>, doublingCosts: Boolean = false): Int {
+    var minFuelConsumption = Int.MAX_VALUE
 
     for (position in positions.first()..positions.last()) {
         val fuelConsumption = calculateFuelConsumptionForPosition(positions, position, doublingCosts)
-        if (fuelConsumption < cheapestFuelConsumption) {
-            cheapestFuelConsumption = fuelConsumption
+        if (fuelConsumption < minFuelConsumption) {
+            minFuelConsumption = fuelConsumption
         }
     }
-    return cheapestFuelConsumption
+    return minFuelConsumption
 }
 
 private fun task1(): Int {
-    return findCheapestGatheringPosition(readCrabPositionsFromFileSorted())
+    return findMinFuelConsumption(readCrabPositionsFromFileSorted())
 }
 
 private fun task2(): Int {
-    return findCheapestGatheringPosition(readCrabPositionsFromFileSorted(), true)
+    return findMinFuelConsumption(readCrabPositionsFromFileSorted(), true)
 }
 
 fun main() {
