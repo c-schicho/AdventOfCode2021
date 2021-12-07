@@ -8,20 +8,20 @@ private fun readCrabPositionsFromFileSorted(path: String = "data/day7/input1.txt
 private fun calculateFuelConsumptionForPosition(
     positions: List<Int>,
     positionToCalculate: Int,
-    doublingCosts: Boolean
+    incrementingCosts: Boolean
 ): Int {
     var fuelConsumption = positions.map { abs(it - positionToCalculate) }
-    if (doublingCosts) {
+    if (incrementingCosts) {
         fuelConsumption = fuelConsumption.map { (it * (it + 1)) / 2 }
     }
     return fuelConsumption.sum()
 }
 
-private fun findMinFuelConsumption(positions: List<Int>, doublingCosts: Boolean = false): Int {
+private fun findMinFuelConsumption(positions: List<Int>, incrementingCosts: Boolean = false): Int {
     var minFuelConsumption = Int.MAX_VALUE
 
     for (position in positions.first()..positions.last()) {
-        val fuelConsumption = calculateFuelConsumptionForPosition(positions, position, doublingCosts)
+        val fuelConsumption = calculateFuelConsumptionForPosition(positions, position, incrementingCosts)
         if (fuelConsumption < minFuelConsumption) {
             minFuelConsumption = fuelConsumption
         }
