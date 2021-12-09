@@ -3,18 +3,18 @@ import java.io.File
 private data class HeightMap(
     val map: List<List<HeightMapField>>
 ) {
-    fun getLeftHeight(x: Int, y: Int) = if (x > 0) map[y][x - 1].height else Int.MAX_VALUE
+    fun getLeftOrMaxHeight(x: Int, y: Int) = if (x > 0) map[y][x - 1].height else MAX_HEIGHT
 
-    fun getRightHeight(x: Int, y: Int) = if (x + 1 < map[y].size) map[y][x + 1].height else Int.MAX_VALUE
+    fun getRightOrMaxHeight(x: Int, y: Int) = if (x + 1 < map[y].size) map[y][x + 1].height else MAX_HEIGHT
 
-    fun getAboveHeight(x: Int, y: Int) = if (y > 0) map[y - 1][x].height else Int.MAX_VALUE
+    fun getAboveOrMaxHeight(x: Int, y: Int) = if (y > 0) map[y - 1][x].height else MAX_HEIGHT
 
-    fun getBelowHeight(x: Int, y: Int) = if (y + 1 < map.size) map[y + 1][x].height else Int.MAX_VALUE
+    fun getBelowOrMaxHeight(x: Int, y: Int) = if (y + 1 < map.size) map[y + 1][x].height else MAX_HEIGHT
 
     fun isLocalMinimum(x: Int, y: Int): Boolean {
         val fieldHeight = map[y][x].height
-        return getLeftHeight(x, y) > fieldHeight && getRightHeight(x, y) > fieldHeight &&
-                getAboveHeight(x, y) > fieldHeight && getBelowHeight(x, y) > fieldHeight
+        return getLeftOrMaxHeight(x, y) > fieldHeight && getRightOrMaxHeight(x, y) > fieldHeight &&
+                getAboveOrMaxHeight(x, y) > fieldHeight && getBelowOrMaxHeight(x, y) > fieldHeight
     }
 
     fun findLowPoints(): List<HeightMapField> {
@@ -61,6 +61,7 @@ private data class HeightMap(
     }
 
     companion object {
+        const val MAX_HEIGHT = 9
 
         fun readHeightMapFromFile(path: String = "data/day9/input1.txt"): HeightMap {
             return HeightMap(File(path).readLines().map { it.map { HeightMapField(it.digitToInt()) } })
@@ -72,7 +73,10 @@ private data class HeightMap(
             return basins.map { it.count() }.sortedDescending().take(3).reduce { acc, area -> acc * area }
         }
     }
-    private data class HeightMapField(val height: Int) { var checked = false }
+
+    private data class HeightMapField(val height: Int) {
+        var checked = false
+    }
 }
 
 private fun task1(): Int {
