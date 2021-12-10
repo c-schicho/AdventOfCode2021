@@ -56,13 +56,11 @@ class Chunks(
 
         private val CLOSING_TO_OPENING = OPENING_TO_CLOSING.map { it.value to it.key }.toMap()
 
-        fun List<Char>.calculateCorruptError(): Int {
-            return this.sumOf { CORRUPT_ERROR[it]!! }
-        }
+        fun List<Char>.calculateCorruptError() = sumOf { CORRUPT_ERROR[it]!! }
 
         fun List<Char>.calculateMissingError(): Long {
             var error = 0L
-            this.forEach { error = error * 5 + MISSING_ERROR[it]!! }
+            forEach { error = error * 5 + MISSING_ERROR[it]!! }
             return error
         }
 
@@ -74,9 +72,7 @@ class Chunks(
     private data class ValidationResult(val isCorrupt: Boolean, val elements: List<Char>)
 }
 
-private fun List<Long>.median(): Long {
-    return this.sorted()[this.size / 2]
-}
+private fun List<Long>.median() = sorted()[size / 2]
 
 private fun task1(): Int {
     return Chunks.readChunksFromFile()
