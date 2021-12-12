@@ -5,9 +5,9 @@ data class CaveNetwork(
     private val end: Cave
 ) {
 
-    fun findNumberOfAllPaths(allowVisitingTwice: Boolean = false): Int {
+    fun findNumberOfAllPaths(allowVisitingTwiceOnce: Boolean = false): Int {
         val allPaths = mutableListOf<MutableList<String>>()
-        findPathsRecursive(start, mutableListOf(), allPaths, allowVisitingTwice)
+        findPathsRecursive(start, mutableListOf(), allPaths, allowVisitingTwiceOnce)
         return allPaths.count()
     }
 
@@ -15,7 +15,7 @@ data class CaveNetwork(
         startCave: Cave,
         pathList: MutableList<String>,
         allPaths: MutableList<MutableList<String>>,
-        allowVisitingTwice: Boolean,
+        allowVisitingTwiceOnce: Boolean,
         hasVisitedOneTwice: Boolean = false
     ) {
         val currentPathList = pathList.toMutableList()
@@ -30,14 +30,13 @@ data class CaveNetwork(
 
         for (cave in startCave.connections) {
             if (cave.isSmallCave && cave.visitedInCurrentStep) {
-                val canVisitTwice = allowVisitingTwice && !hasVisitedOneTwice && cave.name != START_NAME
-                if (canVisitTwice) {
-                    findPathsRecursive(cave, currentPathList, allPaths, true, true)
-                } else {
+                val canVisitTwice = allowVisitingTwiceOnce && !hasVisitedOneTwice && cave.name != START_NAME
+                if (!canVisitTwice) {
                     continue
                 }
+                findPathsRecursive(cave, currentPathList, allPaths, true, true)
             } else {
-                findPathsRecursive(cave, currentPathList, allPaths, allowVisitingTwice, hasVisitedOneTwice)
+                findPathsRecursive(cave, currentPathList, allPaths, allowVisitingTwiceOnce, hasVisitedOneTwice)
             }
         }
         startCave.visitedNTimes--
@@ -77,7 +76,7 @@ private fun task1(): Int {
 }
 
 private fun task2(): Int {
-    return CaveNetwork.readCaveNetworkFromFile().findNumberOfAllPaths(allowVisitingTwice = true)
+    return CaveNetwork.readCaveNetworkFromFile().findNumberOfAllPaths(allowVisitingTwiceOnce = true)
 }
 
 fun main() {
